@@ -1,0 +1,26 @@
+TIL Extern & Pub Extern C
+
+
+Extern is a keyword that, in general terms, makes Rust crates aware of external code.
+
+One way this works, is you can create peer dependencies by declaring something like `extern crate lazy_static`.s
+
+The other, more relevant for my needs use, is for creating FFI interfaces Rust can either call external code by, or be called by.
+
+#[link(name = "my_c_library")]
+extern "C" {
+	fn my_c_library_function(x: i32) -> bool;
+}
+
+would link the library, and expose my_c_library_function as an unsafe Rust function.
+
+The inverse, making Rust callable from another language like C, would look like 
+
+#[no_mangle]
+pub extern "C" fn callable_from_c(x: i32) -> bool {
+    x % 3 == 0
+}
+
+
+I had previously just been making assumptions about what these did. The asumptions were broadly
+_right_, but it's generally better to know than to speculate. 
